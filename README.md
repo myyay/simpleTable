@@ -160,9 +160,9 @@ $.fn.serializeObject = function () {
     });
     return o;
 }
-
+</pre></code>
  ## 附录3: common.js中的内容
- 
+ <pre><code>
 //=================================== 分页列表功能 ===================================
 // pagerBar显示
 // pager 对象
