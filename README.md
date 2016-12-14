@@ -30,7 +30,7 @@
     
 分页条，该部分样式是写死的，如果要修改样式，必须修改Page类的代码和前端的js代码。 该分页条首页和最后一页一定是显示的，因此有首页，尾页，上一页和下一页的功能。
 
-![pagerBar](https://github.com/myyay/simpleTable/blob/master/resources/img/pagerBar.png)
+![pagerBar](https://github.com/myyay/simpleTable/raw/master/resources/img/pagerBar.png)
 
 ## 三. 通用js代码部分
 接入第一步，将以下代码加入到公用js代码中。
@@ -56,7 +56,7 @@ Page对象如下: Page.java
 
 Spring MVC的方法:
   
-![Spring MVC写法](https://github.com/myyay/simpleTable/tree/master/resources/img/SpringMVC.png)
+![Spring MVC写法](https://github.com/myyay/simpleTable/raw/master/resources/img/SpringMVC.png)
 
 
 ## 五.配置说明
@@ -115,9 +115,9 @@ js 对象:
 比如:    var obj = {a:[[{c:[{e:[{f:{g:'tt'}}]}]}]]}; 可以通过配置a[0][0].c[0].e[0].f.g的方式获取，得到的值为"tt"。
 举个配置的例子:
   
-![listMapping](https://github.com/myyay/simpleTable/tree/master/resources/img/listMapping.png)
+![listMapping](https://github.com/myyay/simpleTable/raw/master/resources/img/listMapping.png)
   
-![方法说明](https://github.com/myyay/simpleTable/tree/master/resources/img/方法说明.png)
+![方法说明](https://github.com/myyay/simpleTable/raw/master/resources/img/方法说明.png)
        
 ## 六.加载数据方法
 接入第五步，加载数据方法。
@@ -126,7 +126,7 @@ js 对象:
 targetTable和targetDiv，将这两个值设置到page对象中。分别为展示table的div的id属性和展示分页条div的id属性。
 如下:
   
-![loadData方法.png](https://github.com/myyay/simpleTable/tree/master/resources/img/loadData方法.png)
+![loadData方法.png](https://github.com/myyay/simpleTable/raw/master/resources/img/loadData方法.png)
 
 ## 七.可使用的方法
 接入第六步，调用加载方法。
