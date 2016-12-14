@@ -29,6 +29,8 @@
 本表格支持的样式有限，如果要展示比较复杂的表格，建议使用其他插件。
 
 表格采用纯bootstrap风格，支持行单选。
+
+![pagerBar](https://github.com/myyay/simpleTable/raw/master/resources/img/list.png)
     
 分页条，该部分样式是写死的，如果要修改样式，必须修改Page类的代码和前端的js代码。 该分页条首页和最后一页一定是显示的，因此有首页，尾页，上一页和下一页的功能。
 
