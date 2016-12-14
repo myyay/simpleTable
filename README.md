@@ -108,17 +108,9 @@ js 对象:
 | @!date!@	|标识该列数据返回的是java.util.Date类型，会转换显示样式为:yyyy-MM-dd HH:mm:ss。注意使用该标签必须定义附录1的方法。|
 | @!day!@	|标识该列数据返回的是java.util.Date类型，会转换显示样式为:yyyy-MM-dd。注意使用该标签必须定义附录1的方法。|
 | @!enum!@	|枚举类型，数据返回的是String或Integer类型。根据样式进行显示内容的转换。 例如: @!enum@#1:PC;2:IOS;3:安卓!@orderSource @#后面跟的是枚举内容，比如如果返回值为1，则显示PC；如果返回值 为3，则显示安卓。|
-| @!optCheckbox!@ |<p>	表示该列为checkbox列，后面不再跟对象名，而是跟指定的样式类型，该样式仅供获取check列表时使用，可以不定义真实样式。 使用方法例如:</p><p>"@!optCheckbox!@choose" : {</p> <p>//<-----choose为css样式，可以不指定，用于选择数据时使用</p>
-<p>"columnName" : "选择", //<-----此行没用，忽略</p>
-<p>"getClassFunc" : getCheckClass</p> <p>//<-----渲染方法，此方法用于获取该checkbox的样式，需要返回一个class。方法参数：第一个参数为主键或主键列表(多个主键时)，第二个参数为dataArray数组。</p>
-<p>//"clickFuncName" : "cancelOrder" //<-----无用</p>
-<p>}</p>|
-| @!optBtn!@|<p>表示该列为操作按钮。后面不再跟对象名，而是跟按钮的名称。例如：
-<p>"@!optBtn!@取消订单" : { //<-----取消订单为按钮名称</p>
-<p>"columnName" : "操作", //<-----操作为该列的名称 表格头</p>
-<p>"getClassFunc" : getCancelClass,</p> <p>//<-----渲染方法（同上），需要返回一个class样式，参数同上。比如想要主键为xxxx时隐藏该按钮，就可判断第一个参数是否为xxx，如果是则返回"hidden"（bootstrap隐藏class），否则返回""。</p>
-<p>"clickFuncName" : "cancelOrder"</p> //<-----触发方法名称，参数和渲染一样。注意这里传的是字符串方法名。你需要定义同名方法，来执行点击事件。</p>
-<p>}</p>|
+| @!optCheckbox!@ |<p>	表示该列为checkbox列，后面不再跟对象名，而是跟指定的样式类型，该样式仅供获取check列表时使用，可以不定义真实样式。 使用方法例如:</p><p>"@!optCheckbox!@choose" : {</p> <p>//<-----choose为css样式，可以不指定，用于选择数据时使用</p><p>"columnName" : "选择", //<-----此行没用，忽略</p><p>"getClassFunc" : getCheckClass</p> <p>//<-----渲染方法，此方法用于获取该checkbox的样式，需要返回一个class。方法参数：第一个参数为主键或主键列表(多个主键时)，第二个参数为dataArray数组。</p><p>//"clickFuncName" : "cancelOrder" //<-----无用</p><p>}</p>|
+| @!optBtn!@|<p>表示该列为操作按钮。后面不再跟对象名，而是跟按钮的名称。例如：<p>"@!optBtn!@取消订单" : { //<-----取消订单为按钮名称</p<p>"columnName" : "操作", //<-----操作为该列的名称 表格头</p><p>"getClassFunc" : getCancelClass,</p> <p>//<-----渲染方法（同上），需要返回一个class样式，参数同上。比如想要主键为xxxx时隐藏该按钮，就可判断第一个参数是否为xxx，如果是则返回"hidden"（bootstrap隐藏class），否则返回""。</p>
+<p>"clickFuncName" : "cancelOrder"</p> //<-----触发方法名称，参数和渲染一样。注意这里传的是字符串方法名。你需要定义同名方法，来执行点击事件。</p><p>}</p>|
  	 
 参数名还支持a.b的方式获取对象a属性b。支持a[0]的方式获取a列表的第一个值。这两种方式可以依次类推。
 比如:    var obj = {a:[[{c:[{e:[{f:{g:'tt'}}]}]}]]}; 可以通过配置a[0][0].c[0].e[0].f.g的方式获取，得到的值为"tt"。
