@@ -4,21 +4,32 @@
 
 ## 一. 概述
 该插件的主要目的是将前页列表页的显示代码大大简化，只需要配置和写一个加载page的ajax方法。仅需要配置即可生成列表页，但同时，样式就不可修改，想要自定义表格样式是不支持的。
+
 本插件基于Bootstrap和jquery，必须要引入相关的库。
+
 主要接入步骤如下:
+
     通用js部分,将js代码加入到公用js文件中。
+    
     后台必须以ajax形式返回我们指定的Page对象。
+    
     列表页在指定位置建立两个div，一个用来显示表格，另一个用来显示分页条。
+    
     做表列名与对象属性映射的配置。
+    
     前台js写一个加载数据的方法，要求以页码和每页条数为参数，返回page对象。
+    
     调用_loadPage(页码, 每页条数, 映射配置对象, 加载数据方法)，大功告成。
+    
 后面会按照步骤，依次说明。
 
 ## 二.样式
 本表格支持的样式有限，如果要展示比较复杂的表格，建议使用其他插件。
+
 表格采用纯bootstrap风格，支持行单选。
     
-分页条，该部分样式是写死的，如果要修改样式，必须修改Page类的代码和前端的js代码。 该分页条首页和最后一页一定是显示的，因此有首页，尾页，上一页和下一页的功能。  
+分页条，该部分样式是写死的，如果要修改样式，必须修改Page类的代码和前端的js代码。 该分页条首页和最后一页一定是显示的，因此有首页，尾页，上一页和下一页的功能。
+
 ![pagerBar](https://github.com/myyay/simpleTable/blob/master/resources/img/pagerBar.png)
 
 ## 三. 通用js代码部分
@@ -26,9 +37,12 @@
 代码在附件中:common.js 。
  
 使用说明:
-_loadPage(页码, 每页条数, 映射配置对象, 加载数据方法)方法用来加载页面。
+
+_loadPage(页码, 每页条数, 映射配置对象,加载数据方法)方法用来加载页面。
+
 _getSelPrimaryKey()方法用于获取先中行的主键（后面配置部分会说明什么是主键）。
 _getCheckedPrimaryArray(配置的class)方法用于获取checkbox选中的行的主键列表。
+
  
 注意事项:
 其中增加的以“_”开头的方法，注意在自己代码中不要用到。
@@ -37,64 +51,81 @@ _getCheckedPrimaryArray(配置的class)方法用于获取checkbox选中的行的
  
 ## 四.Page类
 接入第二步，加载数据的部分必须返回Page对象。
+
 Page对象如下: Page.java
+
 Spring MVC的方法:
+  
 ![Spring MVC写法](https://github.com/myyay/simpleTable/tree/master/resources/img/SpringMVC.png)
+
 
 ## 五.配置说明
 接入第三步，略。
+
 接入第四步，配置部分。
+
 该部分是插件的核心部分。配置其实就是要我们定义一个对象，这个对象做一个列表对象与表列名的映射关系。
+
 比如:我们返回的对象为User:
-    class User {
+<pre><code>class User {
           String name;
           Integer age;
           set()...
           get()...
     }
+</code></pre>
 js 对象:
+<pre><code>
     var mapping = {
         "name" : "姓名",
         "age" : "年龄" 
     }
+</code></pre>
 这样一个简单的配置就完成了。
  
 但是仅仅这样肯定是不够的，能用配置解决的就不要写代码。
 
 先定义几个标签：
-属性标签
+
+### 属性标签
+
 以@@······@@包围起来是属性标签，属性标签标识该数据的意义，要求写在最前面。
-标签
-含义
-@@primary@@	主键，表示该字段为本表的主键，后续一些操作的方法会以该标签标识的数据作为参数传入。一般标识一列数据，也可以标识多列，标识多列时会返回一个数组。不能和@@dataArray@@同时使用。
-@@dataArray@@	数据列，在回调方法中会将此列以方法参数传入。可标识多个字段，从上到下从0开始。不能和@@primary@@同时使用。
-@@hide@@	表示该列隐藏不显示。用这个标签和上面两个标签同时使用可以仅提供数据，不显示内容。
+
+| 标签 | 含义  |
+| ----------- | -------------- |
+| @@primary@@ |	主键，表示该字段为本表的主键，后续一些操作的方法会以该标签标识的数据作为参数传入。一般标识一列数据，也可以标识多列，标识多列时会返回一个数组。不能和@@dataArray@@同时使用。|
+| @@dataArray@@ |数据列，在回调方法中会将此列以方法参数传入。可标识多个字段，从上到下从0开始。不能和@@primary@@同时使用。|
+| @@hide@@ | 表示该列隐藏不显示。用这个标签和上面两个标签同时使用可以仅提供数据，不显示内容。|
+
 注意：使用主键的值必须先定义，后面才能用。如果遇到第一列为checkbox的场景，可以先定义一列主键隐藏掉，后面checkbox列就可以用了。
 
-类型标签
+### 类型标签
+
 以@!······!@包围起来的是类型标签，用于标识该列的数据类型。
-标签
-含义
-@!date!@	标识该列数据返回的是java.util.Date类型，会转换显示样式为:yyyy-MM-dd HH:mm:ss。注意使用该标签必须定义附录1的方法。
-@!day!@	标识该列数据返回的是java.util.Date类型，会转换显示样式为:yyyy-MM-dd。注意使用该标签必须定义附录1的方法。
-@!enum!@	枚举类型，数据返回的是String或Integer类型。根据样式进行显示内容的转换。 例如: @!enum@#1:PC;2:金融IOS;3:金融安卓;4:网银IOS;5:网银安卓;6:M页;7:微信;8:商城APP!@orderSource @#后面跟的是枚举内容，比如如果返回值为1，则显示PC；如果返回值 为5，则显示网银安卓。
-@!optCheckbox!@	表示该列为checkbox列，后面不再跟对象名，而是跟指定的样式类型，该样式仅供获取check列表时使用，可以不定义真实样式。 使用方法例如:
-"@!optCheckbox!@choose" : { //<-----choose为css样式，可以不指定，用于选择数据时使用
-"columnName" : "选择", //<-----此行没用，忽略
-"getClassFunc" : getCheckClass //<-----渲染方法，此方法用于获取该checkbox的样式，需要返回一个class。方法参数：第一个参数为主键或主键列表(多个主键时)，第二个参数为dataArray数组。
-//"clickFuncName" : "cancelOrder" //<-----无用
-}
-@!optBtn!@	表示该列为操作按钮。后面不再跟对象名，而是跟按钮的名称。例如：
-"@!optBtn!@取消订单" : { //<-----取消订单为按钮名称
-"columnName" : "操作", //<-----操作为该列的名称 表格头
-"getClassFunc" : getCancelClass, //<-----渲染方法（同上），需要返回一个class样式，参数同上。比如想要主键为xxxx时隐藏该按钮，就可判断第一个参数是否为xxx，如果是则返回"hidden"（bootstrap隐藏class），否则返回""。
-"clickFuncName" : "cancelOrder" //<-----触发方法名称，参数和渲染一样。注意这里传的是字符串方法名。你需要定义同名方法，来执行点击事件。
-}
+
+| 标签 | 含义 |
+| ----------- | -------------- |
+| @!date!@	|标识该列数据返回的是java.util.Date类型，会转换显示样式为:yyyy-MM-dd HH:mm:ss。注意使用该标签必须定义附录1的方法。|
+| @!day!@	|标识该列数据返回的是java.util.Date类型，会转换显示样式为:yyyy-MM-dd。注意使用该标签必须定义附录1的方法。|
+| @!enum!@	|枚举类型，数据返回的是String或Integer类型。根据样式进行显示内容的转换。 例如: @!enum@#1:PC;2:IOS;3:安卓!@orderSource @#后面跟的是枚举内容，比如如果返回值为1，则显示PC；如果返回值 为3，则显示安卓。|
+| @!optCheckbox!@ |<p>	表示该列为checkbox列，后面不再跟对象名，而是跟指定的样式类型，该样式仅供获取check列表时使用，可以不定义真实样式。 使用方法例如:</p><p>"@!optCheckbox!@choose" : {</p> <p>//<-----choose为css样式，可以不指定，用于选择数据时使用</p>
+<p>"columnName" : "选择", //<-----此行没用，忽略</p>
+<p>"getClassFunc" : getCheckClass</p> <p>//<-----渲染方法，此方法用于获取该checkbox的样式，需要返回一个class。方法参数：第一个参数为主键或主键列表(多个主键时)，第二个参数为dataArray数组。</p>
+<p>//"clickFuncName" : "cancelOrder" //<-----无用</p>
+<p>}</p>|
+| @!optBtn!@|<p>表示该列为操作按钮。后面不再跟对象名，而是跟按钮的名称。例如：
+<p>"@!optBtn!@取消订单" : { //<-----取消订单为按钮名称</p>
+<p>"columnName" : "操作", //<-----操作为该列的名称 表格头</p>
+<p>"getClassFunc" : getCancelClass,</p> <p>//<-----渲染方法（同上），需要返回一个class样式，参数同上。比如想要主键为xxxx时隐藏该按钮，就可判断第一个参数是否为xxx，如果是则返回"hidden"（bootstrap隐藏class），否则返回""。</p>
+<p>"clickFuncName" : "cancelOrder"</p> //<-----触发方法名称，参数和渲染一样。注意这里传的是字符串方法名。你需要定义同名方法，来执行点击事件。</p>
+<p>}</p>|
  	 
 参数名还支持a.b的方式获取对象a属性b。支持a[0]的方式获取a列表的第一个值。这两种方式可以依次类推。
 比如:    var obj = {a:[[{c:[{e:[{f:{g:'tt'}}]}]}]]}; 可以通过配置a[0][0].c[0].e[0].f.g的方式获取，得到的值为"tt"。
 举个配置的例子:
+  
 ![listMapping](https://github.com/myyay/simpleTable/tree/master/resources/img/listMapping.png)
+  
 ![方法说明](https://github.com/myyay/simpleTable/tree/master/resources/img/方法说明.png)
        
 ## 六.加载数据方法
@@ -103,6 +134,7 @@ js 对象:
 在成功获取数据后，需要设置两个数据的值。
 targetTable和targetDiv，将这两个值设置到page对象中。分别为展示table的div的id属性和展示分页条div的id属性。
 如下:
+  
 ![loadData方法.png](https://github.com/myyay/simpleTable/tree/master/resources/img/loadData方法.png)
 
 ## 七.可使用的方法
